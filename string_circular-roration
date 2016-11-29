@@ -1,0 +1,6 @@
+Q: A string s a circular rotation of a string t if it matches when the characters are circularly shifted
+by any number of positions; eg: ACTGACG is a circular shift of TGACGAC, and vice versa. Write a program
+tha checks whether two given string s and t circular shifts of one another.
+
+A: 要检查t是否为s循环移位后的字符串，可以将s拼接一次s，然后在拼接后的串中匹配t即可，若匹配到则是，否则不是。
+如，TGACGAC是否为ACTGACG循环移位后的字符串，可以将拼接ACTGACG自身一次，即ACTGACGACTGACG，然后在该拼接串中匹配TGACGAC即可。
