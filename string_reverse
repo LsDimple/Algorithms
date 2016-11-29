@@ -1,0 +1,17 @@
+void reverse_string(char *s)
+{
+    char *e = s + strlen(s) - 1;
+    while (s < e) {
+        char t = *s;
+        *s++ = *e;
+        *e-- = t;
+    }
+}
+
+string reverse_string(string s)
+{
+    string::size_type sz = s.size();
+
+    if (sz <= 1) return s;
+    return reverse_string(s.substr(sz/2, sz-sz/2)) + reverse_string(s.substr(0, sz/2));
+}
