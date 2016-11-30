@@ -12,12 +12,12 @@ string infixtopostfix(const string seq)
 
     st.push('#');
 
-    for (auto it = seq.begin(); it != seq.end(); it++) {
-        if (*it >= 'a' && *it < 'z') {
-            qu.push_back(*it);
-        } else if (*it == '(') {
-            st.push(*it);
-        } else if (*it == ')') {
+    for (auto it : seq) {
+        if (it >= 'a' && it < 'z') {
+            qu.push_back(it);
+        } else if (it == '(') {
+            st.push(it);
+        } else if (it == ')') {
             while (st.top() != '#' && st.top() != '(') {
                 qu.push_back(st.top());
                 st.pop();
@@ -25,11 +25,11 @@ string infixtopostfix(const string seq)
             st.pop(); // pop('(')
         } else {
             while (st.top() != '(' && st.top() != '#' && \
-                  op.at(*it) - op.at(st.top()) <= 0) {
+                  op.at(it) - op.at(st.top()) <= 0) {
                 qu.push_back(st.top());
                 st.pop();
             }
-            st.push(*it);
+            st.push(it);
         }
     }
 
