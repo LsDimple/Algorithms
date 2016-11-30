@@ -1,0 +1,32 @@
+Q: Suppose that a client performs an intermixed sequence of (stack) push and pop opertations. The push operations put 
+the integers 0 through 9 in order onto the stack; the pop operations print out the return values. Which of the following
+sequences(s) could not occur?
+  4 3 2 1 0 9 8 7 6 5
+  4 6 8 7 5 3 2 9 0 1
+  2 5 6 7 4 8 9 3 1 0
+  4 3 2 1 0 5 6 7 8 9
+  0 4 6 5 3 8 1 7 2 9
+  2 1 4 3 6 5 8 7 9 0
+  
+A: 由0-9与所给序列如4 3 2 1 0 9 8 7 6 5依次比较，不相同则入栈，相同则出栈。达到所给序列结尾元素时检查栈是否为空，
+不为空则所给序列不是0-9的一个栈操作序列。
+bool stack_seq(const string base, const string seq)
+{
+    stack<char> st;
+
+    for (auto iter1 = base.begin(), iter2 = seq.begin(); iter1 != base.end(); iter1++) {
+        if (*iter1 != *iter2) {
+            st.push(*iter1);
+            continue;
+        }
+
+        iter2++;
+        while (!st.empty() && *iter2 == st.top()) {
+            iter2++;
+            st.pop();
+        }
+    }
+    if (!st.empty()) return false;
+
+    return true;
+}
