@@ -1,0 +1,41 @@
+Q: Write a filter that converts an arithmetic expression from infix to postfix.
+
+A: 使用一个队列和栈，普通数字直接入队列，操作符入栈；当待入栈的操作符比栈顶元素优先级高时，直接入栈；
+当待入栈的操作符比栈顶元素优先级低时，依次出栈并入队列，直到栈顶元素的优先级低于当前待入栈操作符的优先级。
+另外，操作符与'('之间忽略优先级比较，直接入栈；当待入栈字符为')'时，依次出栈并入队列，直到栈顶元素为'('为止。
+
+string infixtopostfix(const string seq)
+{
+    stack<char> st;
+    deque<char> qu;
+    const map<char, int> op = { {'#', 0}, {'+', 1}, {'-', 1}, {'*', 2}, {'/', 2} };
+
+    st.push('#');
+
+    for (auto it = seq.begin(); it != seq.end(); it++) {
+        if (*it >= 'a' && *it < 'z') {
+            qu.push_back(*it);
+        } else if (*it == '(') {
+            st.push(*it);
+        } else if (*it == ')') {
+            while (st.top() != '#' && st.top() != '(') {
+                qu.push_back(st.top());
+                st.pop();
+            }
+            st.pop(); // pop('(')
+        } else {
+            while (st.top() != '(' && st.top() != '#' && \
+                  op.at(*it) - op.at(st.top()) <= 0) {
+                qu.push_back(st.top());
+                st.pop();
+            }
+            st.push(*it);
+        }
+    }
+
+    while (st.top() != '#') {
+        qu.push_back(st.top());
+        st.pop();
+    }
+    return string(begin(qu), end(qu));
+}
