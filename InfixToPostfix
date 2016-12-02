@@ -24,10 +24,18 @@ string infixtopostfix(const string seq)
             }
             st.pop(); // pop('(')
         } else {
-            while (st.top() != '(' && st.top() != '#' && \
-                  op.at(it) - op.at(st.top()) <= 0) {
-                qu.push_back(st.top());
-                st.pop();
+            while (st.top() != '(' && st.top() != '#') {
+                if (op.at(it).second == 0 && (op.at(it).first - op.at(st.top()).first <= 0)) { // left-associative
+                    qu.push_back(st.top());
+                    st.pop();
+                    continue;
+                }
+                if (op.at(it).second == 1 && (op.at(it).first - op.at(st.top()).first < 0)) {
+                    qu.push_back(st.top());
+                    st.pop();
+                    continue;
+                }
+                break;
             }
             st.push(it);
         }
@@ -38,4 +46,39 @@ string infixtopostfix(const string seq)
         st.pop();
     }
     return string(begin(qu), end(qu));
+}
+
+double evalutePostfix(const string s)
+{
+    stack<double> st;
+
+    for (const auto &c : s) {
+        if (c >= '0' && c <= '9') {
+            st.push(c-'0');
+            continue;
+        }
+
+        double op1, op2;
+        op2 = st.top(); st.pop();
+        op1 = st.top(); st.pop();
+        switch (c) {
+        case '+':
+            st.push(op1+op2);
+            break;
+        case '-':
+            st.push(op1-op2);
+            break;
+        case '*':
+            st.push(op1*op2);
+            break;
+        case '/':
+            st.push(op1/op2);
+            break;
+        case '^':
+            st.push(pow(op1, op2));
+            break;
+        }
+    }
+
+    return st.top();
 }
