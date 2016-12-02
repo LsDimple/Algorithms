@@ -1,0 +1,33 @@
+Q: Write a function that takes the first Node in a linked list as argument and (destructively) reverses the list, 
+returning the first Node in the result.
+
+A: 迭代法：声明一个新的链表，遍历原链表并依次取出一个节点，将其从链表头依次插入新的链表中。
+void reverse(struct node *link)
+{
+    struct node *newlink = NULL;
+    struct node *prev = link;
+
+    while (link) {
+        link = prev->next;
+        prev->next = newlink;
+        newlink = prev;
+        prev = link;
+    }
+}
+
+递归法：链表也是一个递归定义的结构，假设一个链表A1->A2->A3->A4->A5，要翻转该链表可以表示为，
+   A1->A2->A3->A4->A5 ==> A1->(A2->A3->A4->A5) ==> A1->A2->(A3->A4->A5) ==> A1->A2->A3->(A4->A5) ==> A1->A2->A3->A4->(A5)
+  (A5->A4->A3->A2->A1) <== (A5->A4->A3->A2)<-A1 <== (A5->A4->A3)<-A2<-A1 <== (A5->A4)<-A3<-A2<-A1 <==
+
+struct node *reverse(struct node *link)
+{
+    if (link->next == NULL) return link;
+
+    struct node *rev;
+    struct node *second = link->next;
+    rev = reverse(second);
+    link->next = second->next;
+    second->next = link;
+
+    return rev;
+}
